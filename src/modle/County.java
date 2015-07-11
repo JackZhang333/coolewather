@@ -5,7 +5,7 @@ public class County
 	private int id;
 	private String countyName;
 	private String countyCode;
-	private int CityId;
+	private int cityId;
 	//属性的get和set方法
 	public int getId()
 	{
@@ -33,11 +33,11 @@ public class County
 	}
 	public int getCityId()
 	{
-		return CityId;
+		return cityId;
 	}
 	public void setCityId(int cityId)
 	{
-		CityId = cityId;
+		this.cityId = cityId;
 	}
 	
 	
