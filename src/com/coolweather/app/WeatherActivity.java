@@ -4,6 +4,8 @@ import util.HttpCallbackListener;
 import util.HttpUtil;
 import util.Utility;
 import android.app.Activity;
+import android.app.SearchManager.OnCancelListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,11 +15,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class WeatherActivity extends Activity {
+public class WeatherActivity extends Activity implements OnClickListener{
 	/**
 	 * 显示天气信息的视图
 	 */
@@ -46,6 +50,14 @@ public class WeatherActivity extends Activity {
 	 * 用于显示当前的天气
 	 */
 	private TextView mCurrentDate;
+	/**
+	 * 重新选择城市的按钮
+	 */
+	private Button mBtnChooseCity;
+	/**
+	 * 刷新页面的按钮
+	 */
+	private Button mBtnFresh;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -60,6 +72,12 @@ public class WeatherActivity extends Activity {
 		mPublishText =(TextView) findViewById(R.id.publish_text);
 		
 		mWeatherInfo = (LinearLayout) findViewById(R.id.weather_info_layout);
+		
+		mBtnChooseCity =(Button) findViewById(R.id.switch_city);
+		mBtnFresh = (Button) findViewById(R.id.fresh_info);
+		
+		mBtnChooseCity.setOnClickListener(this);
+		mBtnFresh.setOnClickListener(this);
 		
 		String countyCode = getIntent().getStringExtra("county_code");
 		
@@ -152,6 +170,26 @@ public class WeatherActivity extends Activity {
 		mTemp2.setText(prefs.getString("temp2", ""));
 		mWeatherInfo.setVisibility(View.VISIBLE);
 		mCountyName.setVisibility(View.VISIBLE);
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.switch_city:
+			Intent intent =new Intent(WeatherActivity.this,MainActivity.class);
+			intent.putExtra("isFromWeatherActivity", true);
+			startActivity(intent);
+			finish();
+			break;
+		case R.id.fresh_info:
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String weatherCode =prefs.getString("weather_code", "");
+			queryWeatherInfo(weatherCode);
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 
 }

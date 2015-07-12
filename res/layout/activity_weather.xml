@@ -8,6 +8,15 @@ xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#484E61">
+        <Button 
+            android:id="@+id/switch_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="选择城市"/>
         <TextView 
             android:id="@+id/county_name"
             android:layout_width="wrap_content"
@@ -16,6 +25,16 @@ xmlns:android="http://schemas.android.com/apk/res/android"
             android:textSize="24sp"
             android:textColor="#fff"
             android:text="县市"/>
+        <Button 
+            android:id="@+id/fresh_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="#fff"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="刷新"/>
     </RelativeLayout>
     <RelativeLayout 
         android:layout_width="match_parent"

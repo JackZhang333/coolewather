@@ -51,14 +51,17 @@ public class MainActivity extends Activity
 	private CoolWeatherDB coolWeatherDB;
 	
 	private ProgressDialog progressDialog;
+	private boolean isFromWeatherActivity;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
+		Intent mintent =getIntent();
+		isFromWeatherActivity =mintent.getBooleanExtra("isFromWeatherActivity", false);
 		
 		super.onCreate(savedInstanceState);
 		//根据SharedPreference中的标识，决定是否要跳转到天气页面
 		SharedPreferences prefs =PreferenceManager.getDefaultSharedPreferences(this);
-		if(prefs.getBoolean("county_selected", false)){
+		if(prefs.getBoolean("county_selected", false)&&!isFromWeatherActivity){
 			Intent intent =new Intent(MainActivity.this,WeatherActivity.class);
 			startActivity(intent);
 			finish();
@@ -272,6 +275,10 @@ public class MainActivity extends Activity
 			queryProvince();
 		}
 		else{
+			if(isFromWeatherActivity){
+				Intent intent =new Intent(MainActivity.this,WeatherActivity.class);
+				startActivity(intent);
+			}
 			finish();
 		}
 	}
