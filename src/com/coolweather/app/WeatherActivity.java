@@ -1,5 +1,7 @@
 package com.coolweather.app;
 
+import receiver.AutoUpdateReceiver;
+import service.AutoUpdateService;
 import util.HttpCallbackListener;
 import util.HttpUtil;
 import util.Utility;
@@ -166,10 +168,14 @@ public class WeatherActivity extends Activity implements OnClickListener{
 		mPublishText.setText("今天"+prefs.getString("publish_time", "")+"发布");
 		mCurrentDate.setText(prefs.getString("current_date", ""));
 		mWeatherDesp.setText(prefs.getString("weather_des", ""));
-		mTemp1.setText(prefs.getString("temp1", ""));
-		mTemp2.setText(prefs.getString("temp2", ""));
+		mTemp1.setText(prefs.getString("temp2", ""));
+		mTemp2.setText(prefs.getString("temp1", ""));
 		mWeatherInfo.setVisibility(View.VISIBLE);
 		mCountyName.setVisibility(View.VISIBLE);
+		
+		Intent intent =new Intent(this,AutoUpdateService.class);
+		Log.d("weatherActivity", "准备启动服务");
+		startService(intent);
 	}
 	@Override
 	public void onClick(View v) {
