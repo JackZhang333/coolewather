@@ -12,7 +12,10 @@ import modle.County;
 import modle.Province;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +56,14 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState){
 		
 		super.onCreate(savedInstanceState);
+		//根据SharedPreference中的标识，决定是否要跳转到天气页面
+		SharedPreferences prefs =PreferenceManager.getDefaultSharedPreferences(this);
+		if(prefs.getBoolean("county_selected", false)){
+			Intent intent =new Intent(MainActivity.this,WeatherActivity.class);
+			startActivity(intent);
+			finish();
+		}
+		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
@@ -79,7 +90,12 @@ public class MainActivity extends Activity
 					queryCounty();
 				}else{
 					selectedCounty =countiesList.get(position);
+					String countyCode =selectedCounty.getCountyCode();
+					Intent intent =new Intent(MainActivity.this,WeatherActivity.class);
+					intent.putExtra("county_code",countyCode);
 					
+					startActivity(intent);
+					finish();
 				}
 				
 			}
@@ -102,7 +118,7 @@ public class MainActivity extends Activity
 			adapter.notifyDataSetChanged();
 			mListView.setSelection(0);
 			mTitle.setText("中国");
-			Log.d("中国","设置标题");
+//			Log.d("中国","设置标题");
 			currentLevel =LEVEL_PROVINCE;
 		}else{
 			//数据库中没有查到就从网络服务器上查询，第一次查询
@@ -120,7 +136,7 @@ public class MainActivity extends Activity
 		if(citiesList!=null){
 			datalist.clear();
 			for(City city:citiesList){
-				Log.d("数据集赋值", city.getCityName()+"");
+//				Log.d("数据集赋值", city.getCityName()+"");
 				datalist.add(city.getCityName());
 			}
 			adapter.notifyDataSetChanged();
@@ -139,7 +155,7 @@ public class MainActivity extends Activity
 		Log.d("query县市","进入查询语句");
 		//先从数据库中查询数据
 		countiesList = coolWeatherDB.loadCounties(selectedCity.getId());
-		Log.d("县市", "当前选择的城市"+selectedCity.getId());
+//		Log.d("县市", "当前选择的城市"+selectedCity.getId());
 		if(countiesList.size()>0){
 			datalist.clear();
 			for(County county:countiesList){
@@ -163,7 +179,7 @@ public class MainActivity extends Activity
 			if(type.equals("city")){
 				address = "http://www.weather.com.cn/data/list3/city"+code+".xml?level=2";
 			}else if(type.equals("county")){
-				Log.d("查询县市","从服务器上查询县市");
+//				Log.d("查询县市","从服务器上查询县市");
 				address = "http://www.weather.com.cn/data/list3/city"+code+".xml?level=3";
 			}
 		}else{
@@ -252,8 +268,7 @@ public class MainActivity extends Activity
 	public void onBackPressed(){
 		if(currentLevel==LEVEL_COUNTY){
 			queryCity();
-		}
-		if(currentLevel==LEVEL_CITY){
+		}else if(currentLevel==LEVEL_CITY){
 			queryProvince();
 		}
 		else{
